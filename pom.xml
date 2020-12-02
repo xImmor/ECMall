@@ -15,6 +15,9 @@
         <module>ecmall-order</module>
         <module>ecmall-member</module>
         <module>ecmall-coupon</module>
+        <module>renren-fast</module>
+        <module>renren-generator</module>
+        <module>ecmall-common</module>
     </modules>
 
 </project>
