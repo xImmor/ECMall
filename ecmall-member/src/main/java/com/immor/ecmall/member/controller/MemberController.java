@@ -3,6 +3,7 @@ package com.immor.ecmall.member.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import com.immor.ecmall.member.feign.CouponFeignService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +30,21 @@ import com.immor.common.utils.R;
 public class MemberController {
     @Autowired
     private MemberService memberService;
+
+    @Autowired
+    private CouponFeignService couponFeignService;
+
+    /**
+     * openFeign远程调用ecmall-coupon优惠券服务测试
+     * @return
+     */
+    @RequestMapping("/coupons")
+    public R testFeign(){
+        MemberEntity entity = new MemberEntity();
+        entity.setUsername("shenxian");
+        R r = couponFeignService.memberCoupon();
+        return R.ok().put("member", entity).put("coupons", r.get("coupons"));
+    }
 
     /**
      * 列表
