@@ -16,6 +16,12 @@ mybatis-plus:
   global-config:
     db-config:
       id-type: auto
+      logic-delete-value: 0
+      logic-not-delete-value: 1
+      logic-delete-field: showStatus
 
 server:
   port: 10001
+logging:
+  level:
+    com.immor.ecmall: debug
