@@ -18,6 +18,7 @@
         <module>renren-fast</module>
         <module>renren-generator</module>
         <module>ecmall-common</module>
+        <module>ecmall-third-party</module>
     </modules>
 
 </project>
