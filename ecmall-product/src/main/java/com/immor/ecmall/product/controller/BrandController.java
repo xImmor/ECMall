@@ -61,8 +61,8 @@ public class BrandController {
      */
     @RequestMapping("/save")
     //@RequiresPermissions("product:brand:save")
-    public R save(@Valid @RequestBody BrandEntity brand, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
+    public R save(@Valid @RequestBody BrandEntity brand/*, BindingResult bindingResult*/) {
+/*        if (bindingResult.hasErrors()) {
             Map<String, String> map = new HashMap<>();
             bindingResult.getFieldErrors().forEach(item -> {
                 map.put(item.getField(), item.getDefaultMessage());
@@ -70,7 +70,8 @@ public class BrandController {
             return R.error(400, "提交数据不合法").put("data", map);
         } else {
             brandService.save(brand);
-        }
+        }*/
+        brandService.save(brand);
         return R.ok();
     }
 
