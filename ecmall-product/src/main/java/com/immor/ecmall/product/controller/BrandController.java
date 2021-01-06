@@ -1,23 +1,17 @@
 package com.immor.ecmall.product.controller;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.immor.ecmall.product.entity.BrandEntity;
-import com.immor.ecmall.product.service.BrandService;
 import com.immor.common.utils.PageUtils;
 import com.immor.common.utils.R;
+import com.immor.common.valid.AddGroup;
+import com.immor.common.valid.UpdateGroup;
+import com.immor.ecmall.product.entity.BrandEntity;
+import com.immor.ecmall.product.service.BrandService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import java.util.Arrays;
+import java.util.Map;
 
 
 /**
@@ -61,7 +55,7 @@ public class BrandController {
      */
     @RequestMapping("/save")
     //@RequiresPermissions("product:brand:save")
-    public R save(@Valid @RequestBody BrandEntity brand/*, BindingResult bindingResult*/) {
+    public R save(@Validated({AddGroup.class}) @RequestBody BrandEntity brand/*, BindingResult bindingResult*/) {
 /*        if (bindingResult.hasErrors()) {
             Map<String, String> map = new HashMap<>();
             bindingResult.getFieldErrors().forEach(item -> {
@@ -80,8 +74,8 @@ public class BrandController {
      */
     @RequestMapping("/update")
     //@RequiresPermissions("product:brand:update")
-    public R update(@Valid @RequestBody BrandEntity brand){
-		brandService.updateById(brand);
+    public R update(@Validated({UpdateGroup.class}) @RequestBody BrandEntity brand) {
+        brandService.updateById(brand);
 
         return R.ok();
     }

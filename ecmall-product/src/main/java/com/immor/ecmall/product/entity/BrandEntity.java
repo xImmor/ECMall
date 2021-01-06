@@ -2,13 +2,13 @@ package com.immor.ecmall.product.entity;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-
-import java.io.Serializable;
-import java.util.Date;
+import com.immor.common.valid.AddGroup;
+import com.immor.common.valid.UpdateGroup;
 import lombok.Data;
 import org.hibernate.validator.constraints.URL;
 
 import javax.validation.constraints.*;
+import java.io.Serializable;
 
 /**
  * Ʒ?
@@ -25,18 +25,20 @@ public class BrandEntity implements Serializable {
 	/**
 	 * Ʒ??id
 	 */
+	@Null(message = "新增不可携带品牌Id", groups = {AddGroup.class})
+	@NotNull(message = "修改必须携带品牌Id", groups = {UpdateGroup.class})
 	@TableId
 	private Long brandId;
 	/**
 	 * Ʒ???
 	 */
-	@NotBlank(message = "品牌名不能为空")
+	@NotBlank(message = "品牌名不能为空", groups = {AddGroup.class, UpdateGroup.class})
 	private String name;
 	/**
 	 * Ʒ??logo??ַ
 	 */
-	@NotEmpty
-	@URL(message = "logo必须是一个合法的url地址")
+	@NotEmpty(groups = {AddGroup.class})
+	@URL(message = "logo必须是一个合法的url地址", groups = {AddGroup.class, UpdateGroup.class})
 	private String logo;
 	/**
 	 * ???
@@ -49,14 +51,14 @@ public class BrandEntity implements Serializable {
 	/**
 	 * ????????ĸ
 	 */
-	@NotEmpty
-	@Pattern(regexp = "/^[a-zA-Z]$/", message = "检索首字母必须是一个字母")
+	@NotEmpty(groups = {AddGroup.class})
+	@Pattern(regexp = "/^[a-zA-Z]$/", message = "检索首字母必须是一个字母", groups = {AddGroup.class, UpdateGroup.class})
 	private String firstLetter;
 	/**
 	 * ???
 	 */
-	@NotNull
-	@Min(value = 0, message = "排序必须大于等于0")
+	@NotNull(groups = {AddGroup.class})
+	@Min(value = 0, message = "排序必须大于等于0", groups = {AddGroup.class, UpdateGroup.class})
 	private Integer sort;
 
 }
