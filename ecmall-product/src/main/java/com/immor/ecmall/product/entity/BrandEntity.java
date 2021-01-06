@@ -2,8 +2,10 @@ package com.immor.ecmall.product.entity;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.immor.common.annotation.ListValue;
 import com.immor.common.valid.AddGroup;
 import com.immor.common.valid.UpdateGroup;
+import com.immor.common.valid.UpdateStatusGroup;
 import lombok.Data;
 import org.hibernate.validator.constraints.URL;
 
@@ -47,12 +49,14 @@ public class BrandEntity implements Serializable {
 	/**
 	 * ??ʾ״̬[0-????ʾ??1-??ʾ]
 	 */
+	@NotNull(groups = {AddGroup.class, UpdateStatusGroup.class})
+	@ListValue(values = {0, 1}, groups = {AddGroup.class, UpdateStatusGroup.class})
 	private Integer showStatus;
 	/**
 	 * ????????ĸ
 	 */
 	@NotEmpty(groups = {AddGroup.class})
-	@Pattern(regexp = "/^[a-zA-Z]$/", message = "检索首字母必须是一个字母", groups = {AddGroup.class, UpdateGroup.class})
+	@Pattern(regexp = "^[a-zA-Z]$", message = "检索首字母必须是一个字母", groups = {AddGroup.class, UpdateGroup.class})
 	private String firstLetter;
 	/**
 	 * ???

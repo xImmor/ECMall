@@ -4,6 +4,7 @@ import com.immor.common.utils.PageUtils;
 import com.immor.common.utils.R;
 import com.immor.common.valid.AddGroup;
 import com.immor.common.valid.UpdateGroup;
+import com.immor.common.valid.UpdateStatusGroup;
 import com.immor.ecmall.product.entity.BrandEntity;
 import com.immor.ecmall.product.service.BrandService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,12 +82,26 @@ public class BrandController {
     }
 
     /**
+     * 修改状态
+     *
+     * @param brand
+     * @return
+     */
+    @RequestMapping("/update/status")
+    //@RequiresPermissions("product:brand:update")
+    public R updateStatus(@Validated({UpdateStatusGroup.class}) @RequestBody BrandEntity brand) {
+        brandService.updateById(brand);
+
+        return R.ok();
+    }
+
+    /**
      * 删除
      */
     @RequestMapping("/delete")
     //@RequiresPermissions("product:brand:delete")
-    public R delete(@RequestBody Long[] brandIds){
-		brandService.removeByIds(Arrays.asList(brandIds));
+    public R delete(@RequestBody Long[] brandIds) {
+        brandService.removeByIds(Arrays.asList(brandIds));
 
         return R.ok();
     }
