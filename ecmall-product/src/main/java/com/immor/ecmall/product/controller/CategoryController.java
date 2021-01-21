@@ -1,20 +1,16 @@
 package com.immor.ecmall.product.controller;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
+import com.immor.common.utils.R;
+import com.immor.ecmall.product.entity.CategoryEntity;
+import com.immor.ecmall.product.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.immor.ecmall.product.entity.CategoryEntity;
-import com.immor.ecmall.product.service.CategoryService;
-import com.immor.common.utils.PageUtils;
-import com.immor.common.utils.R;
+import java.util.Arrays;
+import java.util.List;
 
 
 
@@ -69,8 +65,8 @@ public class CategoryController {
      */
     @RequestMapping("/update")
     //@RequiresPermissions("product:category:update")
-    public R update(@RequestBody CategoryEntity category){
-		categoryService.updateById(category);
+    public R update(@RequestBody CategoryEntity category) {
+        categoryService.updateCascade(category);
 
         return R.ok();
     }
