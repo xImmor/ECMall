@@ -2,8 +2,8 @@ package com.immor.ecmall.product.controller;
 
 import com.immor.common.utils.PageUtils;
 import com.immor.common.utils.R;
-import com.immor.ecmall.product.entity.AttrEntity;
 import com.immor.ecmall.product.service.AttrService;
+import com.immor.ecmall.product.vo.AttrRespVO;
 import com.immor.ecmall.product.vo.AttrVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -47,13 +47,16 @@ public class AttrController {
 
     /**
      * 信息
+     * /product/attr/info/{attrId}
      */
     @RequestMapping("/info/{attrId}")
     //@RequiresPermissions("product:attr:info")
-    public R info(@PathVariable("attrId") Long attrId){
-		AttrEntity attr = attrService.getById(attrId);
+    public R info(@PathVariable("attrId") Long attrId) {
+//		AttrEntity attr = attrService.getById(attrId);
 
-        return R.ok().put("attr", attr);
+        AttrRespVO attrRespVO = attrService.getAttrInfo(attrId);
+
+        return R.ok().put("attr", attrRespVO);
     }
 
     /**
@@ -72,8 +75,8 @@ public class AttrController {
      */
     @RequestMapping("/update")
     //@RequiresPermissions("product:attr:update")
-    public R update(@RequestBody AttrEntity attr){
-		attrService.updateById(attr);
+    public R update(@RequestBody AttrRespVO attr) {
+        attrService.updateAttr(attr);
 
         return R.ok();
     }
