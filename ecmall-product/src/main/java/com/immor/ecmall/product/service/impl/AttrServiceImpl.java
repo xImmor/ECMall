@@ -1,24 +1,30 @@
 package com.immor.ecmall.product.service.impl;
 
-import com.immor.ecmall.product.dao.AttrAttrgroupRelationDao;
-import com.immor.ecmall.product.entity.AttrAttrgroupRelationEntity;
-import com.immor.ecmall.product.vo.AttrVO;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.Map;
-
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.immor.common.utils.PageUtils;
 import com.immor.common.utils.Query;
-
+import com.immor.ecmall.product.dao.AttrAttrgroupRelationDao;
 import com.immor.ecmall.product.dao.AttrDao;
+import com.immor.ecmall.product.dao.AttrGroupDao;
+import com.immor.ecmall.product.dao.CategoryDao;
+import com.immor.ecmall.product.entity.AttrAttrgroupRelationEntity;
 import com.immor.ecmall.product.entity.AttrEntity;
+import com.immor.ecmall.product.entity.AttrGroupEntity;
+import com.immor.ecmall.product.entity.CategoryEntity;
 import com.immor.ecmall.product.service.AttrService;
+import com.immor.ecmall.product.vo.AttrRespVO;
+import com.immor.ecmall.product.vo.AttrVO;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @Service("attrService")
@@ -26,6 +32,12 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
 
     @Autowired
     private AttrAttrgroupRelationDao attrAttrgroupRelationDao;
+
+    @Autowired
+    private AttrGroupDao attrGroupDao;
+
+    @Autowired
+    private CategoryDao categoryDao;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -50,6 +62,45 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
         attrAttrgroupRelationEntity.setAttrId(attrEntity.getAttrId());
         attrAttrgroupRelationDao.insert(attrAttrgroupRelationEntity);
 
+    }
+
+    @Override
+    public PageUtils queryBaseAttrPage(Map<String, Object> params, Long catelogId) {
+        QueryWrapper<AttrEntity> queryWrapper = new QueryWrapper<>();
+        if (catelogId != 0) {
+            queryWrapper.eq("catelog_id", catelogId);
+        }
+        String key = (String) params.get("key");
+        if (StringUtils.isNotBlank(key)) {
+            queryWrapper.and(wrapper -> {
+                wrapper.eq("attr_id", key).or().like("attr_name", key);
+            });
+        }
+
+        IPage<AttrEntity> page = this.page(
+                new Query<AttrEntity>().getPage(params),
+                queryWrapper
+        );
+
+        PageUtils pageUtils = new PageUtils(page);
+        List<AttrEntity> records = page.getRecords();
+        List<AttrRespVO> attrRespVOS = records.stream().map((attrEntity) -> {
+            AttrRespVO attrRespVO = new AttrRespVO();
+            BeanUtils.copyProperties(attrEntity, attrRespVO);
+
+            AttrAttrgroupRelationEntity attrId = attrAttrgroupRelationDao.selectOne(new QueryWrapper<AttrAttrgroupRelationEntity>().eq("attr_id", attrEntity.getAttrId()));
+            if (attrId != null) {
+                AttrGroupEntity attrGroupEntity = attrGroupDao.selectById(attrId.getAttrGroupId());
+                attrRespVO.setGroupName(attrGroupEntity.getAttrGroupName());
+            }
+            CategoryEntity categoryEntity = categoryDao.selectById(attrEntity.getCatelogId());
+            if (categoryEntity != null) {
+                attrRespVO.setCatelogName(categoryEntity.getName());
+            }
+            return attrRespVO;
+        }).collect(Collectors.toList());
+        pageUtils.setList(attrRespVOS);
+        return pageUtils;
     }
 
 }
