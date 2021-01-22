@@ -3,6 +3,7 @@ package com.immor.ecmall.product.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.immor.common.utils.PageUtils;
 import com.immor.ecmall.product.entity.AttrEntity;
+import com.immor.ecmall.product.vo.AttrVO;
 
 import java.util.Map;
 
@@ -16,5 +17,7 @@ import java.util.Map;
 public interface AttrService extends IService<AttrEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    void saveAttr(AttrVO attr);
 }
 
